@@ -48,3 +48,121 @@ Few snapshots of the application <br>
 * MQTT Subscriber codebase 
 * MQTT Publish codebase
 * MQTT to Database insertion features
+
+
+# Database Schema Documentation
+
+## Table 1: `users`
+- **id**: `SERIAL PRIMARY KEY`
+  - Unique identifier for each user.
+- **username**: `VARCHAR(255) NOT NULL`
+  - The username of the user, must be unique and not null.
+- **password**: `VARCHAR(255) NULL`
+  - The password of the user, can be null (in case of external authentication methods).
+- **role_id**: `INTEGER`
+  - Foreign key referencing the `id` column in the `roles` table.
+
+## Table 2: `roles`
+- **id**: `SERIAL PRIMARY KEY`
+  - Unique identifier for each role.
+- **role_names**: `VARCHAR(255)`
+  - The name of the role, such as 'admin', 'user', etc.
+
+## Table 3: `machine_info`
+- **id**: `SERIAL PRIMARY KEY`
+  - Unique identifier for each machine.
+- **machine_name**: `VARCHAR(255)`
+  - The name of the machine.
+- **machine_alias**: `VARCHAR(255)`
+  - An alias for the machine.
+- **machine_location**: `VARCHAR(255)`
+  - The location of the machine.
+- **role_id**: `INTEGER`
+  - Foreign key referencing the `id` column in the `roles` table.
+
+## Table 4: `machine_data`
+- **id**: `SERIAL PRIMARY KEY`
+  - Unique identifier for each data entry.
+- **machine_id**: `INTEGER`
+  - Foreign key referencing the `id` column in the `machine_info` table.
+- **battery_voltage**: `FLOAT`
+  - The battery voltage of the machine.
+- **current**: `FLOAT`
+  - The current in the machine.
+- **psp**: `FLOAT`
+  - Pressure sensor parameter.
+- **tr_temp**: `FLOAT`
+  - Temperature of some component (transformer temperature).
+- **ambient_temperature**: `FLOAT`
+  - Ambient temperature where the machine is located.
+- **created_time**: `TIMESTAMP`
+  - The time when the data was recorded.
+- **oil_level**: `FLOAT`
+  - The oil level of the machine.
+
+## Table 5: `machine_data_test_post`
+- **id**: `SERIAL PRIMARY KEY`
+  - Unique identifier for each test data entry.
+- **machine_id**: `INTEGER`
+  - Foreign key referencing the `id` column in the `machine_info` table.
+- **battery_voltage**: `FLOAT`
+  - The battery voltage of the machine.
+- **psp**: `FLOAT`
+  - Pressure sensor parameter.
+- **ambient_temperature**: `FLOAT`
+  - Ambient temperature where the machine is located.
+- **created_at**: `TIMESTAMP DEFAULT CURRENT_TIMESTAMP`
+  - The time when the test data was recorded, with a default value of the current timestamp.
+
+## SQL Script
+
+```sql
+-- Create roles table
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    role_names VARCHAR(255)
+);
+
+-- Create users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
+    role_id INTEGER,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+-- Create machine_info table
+CREATE TABLE machine_info (
+    id SERIAL PRIMARY KEY,
+    machine_name VARCHAR(255),
+    machine_alias VARCHAR(255),
+    machine_location VARCHAR(255),
+    role_id INTEGER,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+-- Create machine_data table
+CREATE TABLE machine_data (
+    id SERIAL PRIMARY KEY,
+    machine_id INTEGER,
+    battery_voltage FLOAT,
+    current FLOAT,
+    psp FLOAT,
+    tr_temp FLOAT,
+    ambient_temperature FLOAT,
+    created_time TIMESTAMP,
+    oil_level FLOAT,
+    FOREIGN KEY (machine_id) REFERENCES machine_info(id)
+);
+
+-- Create machine_data_test_post table
+CREATE TABLE machine_data_test_post (
+    id SERIAL PRIMARY KEY,
+    machine_id INTEGER,
+    battery_voltage FLOAT,
+    psp FLOAT,
+    ambient_temperature FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (machine_id) REFERENCES machine_info(id)
+);

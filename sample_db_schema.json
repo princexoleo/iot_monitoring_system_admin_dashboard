@@ -1,0 +1,49 @@
+-- Create roles table
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    role_names VARCHAR(255)
+);
+
+-- Create users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
+    role_id INTEGER,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+-- Create machine_info table
+CREATE TABLE machine_info (
+    id SERIAL PRIMARY KEY,
+    machine_name VARCHAR(255),
+    machine_alias VARCHAR(255),
+    machine_location VARCHAR(255),
+    role_id INTEGER,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+-- Create machine_data table
+CREATE TABLE machine_data (
+    id SERIAL PRIMARY KEY,
+    machine_id INTEGER,
+    battery_voltage FLOAT,
+    current FLOAT,
+    psp FLOAT,
+    tr_temp FLOAT,
+    ambient_temperature FLOAT,
+    created_time TIMESTAMP,
+    oil_level FLOAT,
+    FOREIGN KEY (machine_id) REFERENCES machine_info(id)
+);
+
+-- Create machine_data_test_post table
+CREATE TABLE machine_data_test_post (
+    id SERIAL PRIMARY KEY,
+    machine_id INTEGER,
+    battery_voltage FLOAT,
+    psp FLOAT,
+    ambient_temperature FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (machine_id) REFERENCES machine_info(id)
+);
