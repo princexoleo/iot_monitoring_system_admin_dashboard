@@ -1,0 +1,40 @@
+
+{% if card_color == "primary" %}
+
+  <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+  {% elif card_color == "secondary" %}
+    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+  {% elif card_color == "success" %}
+      <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+  {% elif card_color == "danger" %}
+        <div class="card text-white bg-danger mb-3" style="max-width: 18rem;">
+  {% elif card_color == "warning" %}
+          <div class="card text-white bg-warning mb-3" style="max-width: 18rem;">
+  {% elif card_color == "info" %}
+            <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+  {% elif card_color == "light" %}
+              <div class="card text-white bg-light mb-3" style="max-width: 18rem;">
+  {% else %}
+                <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+{% endif %}
+
+  <div class="card-header">{{ title }}</div>
+  <div class="card-body text-center">
+    <h3 class="card-title justify-content-center">{{ val }}</h3>
+      <p class="m-b-0 m-t-5 float-left">
+          {% if unit == "C" %}
+          <img src="{{ url_for('static', filename='assets/icon/icon_temperature.svg') }}" class="card-img-right" width="30" alt="...">
+      {% elif unit == "V" %}
+         <img src="{{ url_for('static', filename='assets/icon/icon_voltage.svg') }}" class="card-img-right" width="30" alt="...">
+      {% elif unit == "KW" %}
+         <img src="{{ url_for('static', filename='assets/icon/icon_power_color.svg') }}" class="card-img-right" width="30" alt="...">
+      {% else %}
+         <img src="{{ url_for('static', filename='assets/icon/icon_current.svg') }}" class="card-img-right" width="30" alt="...">
+      {% endif %}
+      </p>
+
+    <p class="card-text">
+        Unit : {{ unit }}
+    </p>
+  </div>
+</div>

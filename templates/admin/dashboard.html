@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Admin | Dashboard{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card" style="width: 18rem;">
+        <!-- Circle Image Load -->
+        <!-- https://picsum.photos/200 -->
+      <img class="card-img-top rounded-circle" src="https://picsum.photos/200" alt="Card image cap" style="width: 150px; height: 150px;">
+      <div class="card-body">
+        <h5 class="card-title">Admin Dashboard</h5>
+        <p class="card-text"> Welcome {{ session['username'] }} </p>
+        <a href="/admin/logout" class="btn btn-danger">Logout</a>
+      </div>
+    </div>
+    {% if session['role_id'] == 1 %}
+        {% include 'admin/user_manage_table.html' %}
+    {% endif %}
+</div>
+{% endblock %}

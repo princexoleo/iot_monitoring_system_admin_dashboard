@@ -1,0 +1,33 @@
+
+  <div class="container mt-5">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Machine ID</th>
+            <th>Current</th>
+            <th>Voltage</th>
+            <th>Power</th>
+            <th>Transformer Temp</th>
+            <th>Ambient Temp</th>
+            <th>Oil Level</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for col in m_data_object %}
+             <tr>
+              <td>{{ col['machine_id'] }}</td>
+              <td>{{ col['current'] }}</td>
+              <td>{{ col['voltage'] }}</td>
+              <td>{{ col['power'] }}</td>
+              <td>{{ col['transformer_temp'] }}</td>
+              <td>{{ col['ambient_temp'] }}</td>
+              <td>{{ col['oil_level'] }}</td>
+             </tr>
+            {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+  </div>

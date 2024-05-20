@@ -1,0 +1,47 @@
+<div class="table">
+        <span>User Management</span>
+        <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">username</th>
+          <th scope="col">Role</th>
+          <th scope="col">Password Box</th>
+          <th scope="col">Submit Button</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% set num_users = data['user_data']['id']|length %}  # Get user count
+        {% for i in range(num_users) %}
+          <tr>
+              <td>ID: {{ data['user_data']['id'][i] }} </td>
+              <td>{{ data['user_data']['username'][i] }} </td>
+              <form action="/admin/update/{{ data['user_data']['id'][i] }}" method="POST">
+                  <td>
+                     {% set num_roles = data['roles_data']['id']|length %}
+                      <select name="role_id" id="" class="input-group">
+                          {% if data['roles_data']['role_name'][i] !=None %}
+                            <option id="role_id" value="{{ data['roles_data']['id'][i] }}" selected>{{ data['roles_data']['role_name'][i] }}</option>
+                          {% else %}
+                            <option selected>Update Role</option>
+                          {% endif %}
+
+                          {% for r_index in range(num_roles) %}
+                              <option  value="{{ data['roles_data']['id'][r_index] }}"> {{ data['roles_data']['id'][r_index] }} :{{ data['roles_data']['role_name'][r_index] }}</option>
+                          {% endfor %}
+                      </select>
+                  </td>
+                  <td>
+                      <input type="text" name="password" id="password" value="{{ data['user_data']['password'][i] }}" placeholder="Update Password" class="form-control">
+                  </td>
+                  <td>
+                      <button type="submit" class="btn btn-primary">Update</button>
+                      <a href="/admin/delete/{{ data['user_data']['id'][i] }}" class="btn btn-danger">Delete</a></a>
+                  </td>
+              </form>
+          </tr>
+        {% endfor %}
+      </tbody>
+</table>
+</div>

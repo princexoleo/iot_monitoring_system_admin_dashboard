@@ -1,0 +1,59 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="flex justify-content-center">
+        <h1>Dashboard</h1>
+         <p>Username: {{ session["username"] }}</p>
+        <p>Group Name: {{ roles_data['role_name'][0] }}</p>
+    </div>
+    <!-- a dive that will align card in horizontailly only 3 cols -->
+    <div>
+        {% set action_url = url_for('search_machine') %}
+        {% include 'user/searchbox.html' %}
+    </div>
+    <div class="row">
+        {% set data_details = [
+            {"card_color": "primary", "title": "Machine Count", "val": "16", "unit": "quantity"},
+            {"card_color": "primary", "title": "Max voltage", "val": "15.01", "unit": "V"},
+            {"card_color": "success", "title": "Max Current", "val": "4.01", "unit": "A"},
+            {"card_color": "danger", "title": "Max Power", "val": "2.01 A", "unit": "KW"},
+            {"card_color": "danger", "title": "Max Transformer Temp", "val": "40.51 C", "unit": "C"},
+            {"card_color": "warning", "title": "Max Ambient Temp", "val": "25.01 C", "unit": "C"},
+            {"card_color": "primary", "title": "Max Oil Level", "val": "4.00", "unit": "(1-5)"}
+        ] %}
+        {% for idx in range(7) %}
+        <div class="col-md-4 mb-4">
+            {% set card_color = data_details[idx]['card_color'] %}
+            {% set title = data_details[idx]['title'] %}
+            {% set val = data_details[idx]['val'] %}
+            {% set unit = data_details[idx]['unit'] %}
+            {% include 'user/card_details.html' %}
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        {% set m_data_object = [
+            {"machine_id": "1", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "4.00"},
+            {"machine_id": "2", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "5.00"},
+            {"machine_id": "3", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
+             {"machine_id": "4", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "5", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "6", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+        {"machine_id": "7", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
+             {"machine_id": "8", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "9", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "10", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+        {"machine_id": "11", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
+             {"machine_id": "12", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "14", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+             {"machine_id": "16", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
+        ] %}
+        {% include 'user/data_table_details.html' %}
+    </div>
+</div>
+
+{% endblock %}

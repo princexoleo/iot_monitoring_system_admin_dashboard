@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Add Machine{% endblock %}
+
+
+{% block body %}
+{% set current_user = "admin" %}
+  <div class="container">
+    <h1>Add Machine</h1>
+    <div class="mt-5">
+      <form action="/add_machine" method="POST">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Alias</label>
+          <input type="text" name="alias" class="form-control" id="exampleInputEmail1" placeholder="Enter Alias" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Location</label>
+          <input type="text" name="location" class="form-control" placeholder="Enter Location name" id="exampleInputPassword1">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Enter Unique Machine ID</label>
+          <div class="col-xs-2 mb-3 d-flex">
+              <input type="text" name="machine_id"  class="form-control" id="exampleInputPassword1">
+              <button type="button" id="generate" class="btn btn-warning">Generate ID</button>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Machine</button>
+      </form>
+      </div>
+  </div>
+{% endblock %}
+
+
+
+{% block js_block %}
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('generate').addEventListener('click', function() {
+            const randomString = Math.random().toString(36).substring(2, 12);
+            document.querySelector('input[name="machine_id"]').value = randomString;
+        });
+    });
+</script>
+{% endblock %}

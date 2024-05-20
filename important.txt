@@ -1,0 +1,26 @@
+### QUery for creating table
+CREATE TABLE roles (
+  id SERIAL PRIMARY KEY,
+  role_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) DEFAULT NULL,
+  role_id INTEGER REFERENCES roles(id)
+);
+
+
+
+CREATE TABLE machine_data (
+  id SERIAL PRIMARY KEY,
+  role_id INTEGER REFERENCES roles(id) CONSTRAINT fk_machine_data_role REFERENCES roles(id),
+  tr_1 REAL,
+  tr_2 REAL,
+  tr_3 REAL,
+  tr_4 REAL,
+  tr_5 REAL,
+  created_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

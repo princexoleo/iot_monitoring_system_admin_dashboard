@@ -1,0 +1,65 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block body %}
+
+    <div class="div container mt-5">
+        <p> Search Results </p>
+        {% if machine_data != None %}
+<!--        {{ machine_data }}-->
+        {% set data_len = machine_data['machine_id']|length()  %}
+         <div class="row">
+            {% for idx in range(data_len) %}
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "primary" %}
+                {% set title = "Machine ID" %}
+                {% set val = machine_data['machine_id'][idx] %}
+                {% set unit = "ID" %}
+                {% include 'user/card_details.html' %}
+            </div>
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "success" %}
+                {% set title = "Voltage" %}
+                {% set val = machine_data['tr_1'][idx] %}
+                {% set unit = "V" %}
+                {% include 'user/card_details.html' %}
+            </div>
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "warning" %}
+                {% set title = "Power" %}
+                {% set val = machine_data['tr_2'][idx] %}
+                {% set unit = "KW" %}
+                {% include 'user/card_details.html' %}
+            </div>
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "danger" %}
+                {% set title = "Transformer" %}
+                {% set val = machine_data['tr_3'][idx] %}
+                {% set unit = "C" %}
+                {% include 'user/card_details.html' %}
+            </div>
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "info" %}
+                {% set title = "Ambient" %}
+                {% set val = machine_data['tr_4'][idx] %}
+                {% set unit = "C" %}
+                {% include 'user/card_details.html' %}
+            </div>
+            <div class="col-md-4 col-xl-3">
+                {% set card_color = "dark" %}
+                {% set title = "Oil Level" %}
+                {% set val = machine_data['tr_5'][idx] %}
+                {% set unit = "(0-5)" %}
+                {% include 'user/card_details.html' %}
+            </div>
+
+        {% endfor %}
+        </div>
+        {% else %}
+            <p> <span class="text-danger">No Data Found</span> </p>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

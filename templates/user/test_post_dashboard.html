@@ -1,0 +1,83 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Test Post Dashboard{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="flex justify-content-center">
+        <h1>Test Post - Dashboard</h1>
+         <p>Username: {{ session["username"] }}</p>
+        <p>Group Name: {{ roles_data }}</p>
+    </div>
+    <!-- a dive that will align card in horizontailly only 3 cols -->
+    <div>
+        {% set action_url = url_for('test_post_search') %}
+        {% include 'user/searchbox.html' %}
+    </div>
+    <div class="row">
+        {% set m_len = m_data['machine_id']| length %}
+        {% set machine_ids = m_data | map(attribute='machine_id') | list %}
+        {% set unique_machine_ids = machine_ids | unique  | list %}
+        {% set machine_id_count = unique_machine_ids | length %}
+        {% set max_voltage = m_data['battery_voltage']|max %}
+        {% set max_ambient_temp = m_data['ambient_temperature']|max %}
+        {% set max_psp = m_data['psp']|max %}
+        {% set data_details = [
+            {"card_color": "primary", "title": "Machine Count", "val": machine_id_count , "unit": "quantity"},
+            {"card_color": "primary", "title": "Max voltage", "val": max_voltage, "unit": "V"},
+            {"card_color": "success", "title": "Max Ambient Temp.", "val": max_ambient_temp, "unit": "C"},
+            {"card_color": "danger", "title": "Max PSP", "val": max_psp, "unit": "KW"},
+        ] %}
+        {% for idx in range(4) %}
+        <div class="col-md-4 mb-4">
+            {% set card_color = data_details[idx]['card_color'] %}
+            {% set title = data_details[idx]['title'] %}
+            {% set val = data_details[idx]['val'] %}
+            {% set unit = data_details[idx]['unit'] %}
+            {% include 'user/card_details.html' %}
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        {% if m_data | length == 0 %}
+            <div>
+                <p>No data found</p>
+            </div>
+        {% else %}
+            {% set m_len = m_data['machine_id']| length %}
+            <div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="flex-lg-wrap">
+                            <th scope="col">Machine ID</th>
+                            <th scope="col">Alias</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">BatteryVoltage</th>
+                            <th scope="col">PSP</th>
+                            <th scope="col">Ambient Temperature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for idx in range(m_len) %}
+                        <tr>
+                            <th scope="row">{{ m_data['machine_name'][idx] }}</th>
+                            <td>{{ m_data['machine_alias'][idx] }}</td>
+                            <td>{{ m_data['machine_location'][idx] }}</td>
+                            <td>{{ m_data['battery_voltage'][idx] }}</td>
+                            <td>{{ m_data['psp'][idx] }}</td>
+                            <td>{{ m_data['ambient_temperature'][idx] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="extensions/filter-control/bootstrap-table-filter-control.css">
+<script src="extensions/filter-control/bootstrap-table-filter-control.js"></script>

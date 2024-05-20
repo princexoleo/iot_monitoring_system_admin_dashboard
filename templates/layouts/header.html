@@ -1,0 +1,33 @@
+
+<div class="collapse navbar-collapse" id="navbarResponsive">
+  <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+      {% if session.get('username') %}
+        <a class="nav-link" href="url_for('login'  }}"> Publsih Data</a>
+      {% else %}
+      <a class="nav-link" href="#"></a>
+      {% endif %}
+    </li>
+    <li class="nav-item">
+      {% if session.get('username') %}
+        <a class="nav-link" href={{ url_for('add_machine_data') }}>Add Machine</a>
+      {% else %}
+      <a class="nav-link" href="#"></a>
+      {% endif %}
+    </li>
+    <li class="nav-item">
+      {% if session.get('username') %}
+        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+      <a class="nav-link"  href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </li>
+    <li class="nav-item">
+      {% if session.get('username') %}
+        <a class="nav-link" href="{{ url_for('custom_post') }}">Test Post</a>
+      {% else %}
+      <a class="nav-link" href="#"></a>
+      {% endif %}
+    </li>
+  </ul>
+</div>
