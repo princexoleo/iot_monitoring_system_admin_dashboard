@@ -5,25 +5,31 @@
         <thead>
           <tr>
             <th>Machine ID</th>
+             <th>Machine Alias</th>
+              <th>Machine Location</th>
             <th>Current</th>
             <th>Voltage</th>
             <th>Power</th>
             <th>Transformer Temp</th>
             <th>Ambient Temp</th>
             <th>Oil Level</th>
+              <th>Created at</th>
           </tr>
         </thead>
         <tbody>
-
-            {% for col in m_data_object %}
+        {% set m_len = m_data_object['machine_id']|length %}
+            {% for idx in range(m_len) %}
              <tr>
-              <td>{{ col['machine_id'] }}</td>
-              <td>{{ col['current'] }}</td>
-              <td>{{ col['voltage'] }}</td>
-              <td>{{ col['power'] }}</td>
-              <td>{{ col['transformer_temp'] }}</td>
-              <td>{{ col['ambient_temp'] }}</td>
-              <td>{{ col['oil_level'] }}</td>
+              <td>{{ m_data_object['machine_name'][idx] }}</td>
+              <td>{{ m_data_object['machine_alias'][idx] }}</td>
+              <td>{{ m_data_object['machine_location'][idx] }}</td>
+              <td>{{ m_data_object['battery_voltage'][idx] }}</td>
+              <td>{{ m_data_object['current'][idx] }}</td>
+              <td>{{ m_data_object['psp'][idx] }}</td>
+              <td>{{ m_data_object['tr_temp'][idx] }}</td>
+              <td>{{ m_data_object['ambient_temperature'][idx] }}</td>
+              <td>{{ m_data_object['oil_level'][idx] }}</td>
+              <td>{{ m_data_object['created_time'][idx] }}</td>
              </tr>
             {% endfor %}
 

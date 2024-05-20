@@ -19,10 +19,11 @@ def user_dashboard():
     if 'username' in session:
         role_id = session['role_id']
         conn = create_connection()
-        machine_data = get_machine_data_by_role_id(conn, role_id)
+        machine_data = get_test_machine_data(conn, role_id, "user_dashboard")
+        print("User_Dashboard: machine_data: ", machine_data)
         roles_data = get_role_by_id(conn, session['role_id'])
-        return render_template('user/dashboard.html', current_user=session['username'], m_data=machine_data,
-                               roles_data=roles_data)
+        return render_template('user/dashboard.html', current_user=session['username'],
+                               m_data=machine_data,roles_data=roles_data)
     return render_template("frontend/login.html")
 
 
@@ -119,11 +120,11 @@ def login():
 @app.route('/search', methods=['GET', 'POST'])
 def search_machine():
     if request.method == 'POST':
-        machine_id = request.form['machine_id']
+        search_key = request.form['machine_id']
         role_id = session['role_id']
-        print("Input Machine ID: ", machine_id, role_id)
+        # print("Input Machine ID: ", machine_id, role_id)
         conn = create_connection()
-        search_data = get_machine_data_by_machine_id_role_id(conn, machine_id, role_id)
+        search_data = get_machine_data_by_machine_id_role_id(conn, search_key, role_id)
         print("ResultDB:", search_data)
         conn.close()
         if search_data['machine_id']:

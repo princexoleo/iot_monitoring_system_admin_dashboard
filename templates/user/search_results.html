@@ -8,49 +8,56 @@
         <p> Search Results </p>
         {% if machine_data != None %}
 <!--        {{ machine_data }}-->
-        {% set data_len = machine_data['machine_id']|length()  %}
+        {% set data_len = machine_data['machine_name']|length()  %}
          <div class="row">
             {% for idx in range(data_len) %}
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "primary" %}
                 {% set title = "Machine ID" %}
-                {% set val = machine_data['machine_id'][idx] %}
+                {% set val = machine_data['machine_name'][idx] %}
                 {% set unit = "ID" %}
                 {% include 'user/card_details.html' %}
             </div>
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "success" %}
                 {% set title = "Voltage" %}
-                {% set val = machine_data['tr_1'][idx] %}
+                {% set val = machine_data['battery_voltage'][idx] %}
                 {% set unit = "V" %}
                 {% include 'user/card_details.html' %}
             </div>
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "warning" %}
-                {% set title = "Power" %}
-                {% set val = machine_data['tr_2'][idx] %}
+                {% set title = "PSP" %}
+                {% set val = machine_data['psp'][idx] %}
                 {% set unit = "KW" %}
                 {% include 'user/card_details.html' %}
             </div>
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "danger" %}
                 {% set title = "Transformer" %}
-                {% set val = machine_data['tr_3'][idx] %}
+                {% set val = machine_data['tr_temp'][idx] %}
                 {% set unit = "C" %}
                 {% include 'user/card_details.html' %}
             </div>
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "info" %}
-                {% set title = "Ambient" %}
-                {% set val = machine_data['tr_4'][idx] %}
+                {% set title = "Ambient Temperature" %}
+                {% set val = machine_data['ambient_temperature'][idx] %}
                 {% set unit = "C" %}
                 {% include 'user/card_details.html' %}
             </div>
             <div class="col-md-4 col-xl-3">
                 {% set card_color = "dark" %}
                 {% set title = "Oil Level" %}
-                {% set val = machine_data['tr_5'][idx] %}
+                {% set val = machine_data['oil_level'][idx] %}
                 {% set unit = "(0-5)" %}
+                {% include 'user/card_details.html' %}
+            </div>
+             <div class="col-md-4 col-xl-3">
+                {% set card_color = "dark" %}
+                {% set title = "Location" %}
+                {% set val = machine_data['machine_location'][idx] %}
+                {% set unit = "" %}
                 {% include 'user/card_details.html' %}
             </div>
 

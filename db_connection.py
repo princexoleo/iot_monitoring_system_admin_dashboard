@@ -146,60 +146,112 @@ def get_machine_data_by_role_id(conn, role_id):
     return rows
 
 
-def get_machine_data_by_machine_id_role_id(conn, m_id, role_id):
+def get_machine_data_by_machine_id_role_id(conn, search_key, role_id):
     cursor = conn.cursor()
-    sql_query = "SELECT * FROM machine_data WHERE machine_id = %s AND role_id = %s"
-    cursor.execute(sql_query, (m_id, role_id))
-    rows = cursor.fetchall()
-    m_data = {
-        'machine_id': [],
-        'tr_1': [],
-        'tr_2': [],
-        'tr_3': [],
-        'tr_4': [],
-        'tr_5': [],
-        'created_at': []
-    }
-    if rows:
-        for data in rows:
-            m_data['machine_id'].append(data[0])
-            m_data['tr_1'].append(data[2])
-            m_data['tr_2'].append(data[3])
-            m_data['tr_3'].append(data[4])
-            m_data['tr_4'].append(data[5])
-            m_data['tr_5'].append(data[6])
-            m_data['created_at'].append(data[7])
-    return m_data
-
-
-def get_test_machine_data(conn, role_id):
-    cursor = conn.cursor()
-    sql_query = '''SELECT m1.machine_id, m1.battery_voltage, m1.ambient_temperature, m1.psp, m2.machine_name, m2.machine_alias, m2.machine_location
-                    FROM machine_data_test_post AS m1
-                    JOIN machine_info AS m2 ON m1.machine_id = m2.id
-                    WHERE m2.role_id = %s'''
-    cursor.execute(sql_query, (role_id,))
+    sql_query = '''SELECT m1.machine_id, m1.battery_voltage, m1.current, m1.ambient_temperature, m1.psp, m1.tr_temp, m1.oil_level, m1.created_time, m2.machine_name, m2.machine_alias, m2.machine_location
+    FROM machine_data AS m1
+    JOIN machine_info AS m2 ON m1.machine_id = m2.id
+    WHERE m2.machine_name LIKE %s OR m2.machine_alias LIKE %s OR m2.machine_location LIKE %s
+       OR m1.machine_id::text LIKE %s and m2.role_id = %s
+       ORDER BY m1.created_time DESC
+    '''
+    cursor.execute(sql_query, (search_key, search_key, search_key, search_key, role_id))
     rows = cursor.fetchall()
     print(rows)
     fetch_data = {
         'machine_id': [],
         'battery_voltage': [],
+        'current': [],
         'ambient_temperature': [],
         'psp': [],
+        'tr_temp': [],
+        'oil_level': [],
         'machine_name': [],
         'machine_alias': [],
-        'machine_location': []
+        'machine_location': [],
+        'created_time': []
     }
     if rows:
         for data in rows:
             fetch_data['machine_id'].append(data[0])
             fetch_data['battery_voltage'].append(data[1])
-            fetch_data['ambient_temperature'].append(data[2])
-            fetch_data['psp'].append(data[3])
-            fetch_data['machine_name'].append(data[4])
-            fetch_data['machine_alias'].append(data[5])
-            fetch_data['machine_location'].append(data[6])
+            fetch_data['current'].append(data[2])
+            fetch_data['ambient_temperature'].append(data[3])
+            fetch_data['psp'].append(data[4])
+            fetch_data['tr_temp'].append(data[5])
+            fetch_data['oil_level'].append(data[6])
+            fetch_data['created_time'].append(data[7])
+            fetch_data['machine_name'].append(data[8])
+            fetch_data['machine_alias'].append(data[9])
+            fetch_data['machine_location'].append(data[10])
     return fetch_data
+
+
+def get_test_machine_data(conn, role_id, table_type="test_post"):
+    cursor = conn.cursor()
+    if table_type == "test_post":
+        sql_query = '''SELECT m1.machine_id, m1.battery_voltage, m1.ambient_temperature, m1.psp, m2.machine_name, m2.machine_alias, m2.machine_location
+                        FROM machine_data_test_post AS m1
+                        JOIN machine_info AS m2 ON m1.machine_id = m2.id
+                        WHERE m2.role_id = %s'''
+        cursor.execute(sql_query, (role_id,))
+        rows = cursor.fetchall()
+        print(rows)
+        fetch_data = {
+            'machine_id': [],
+            'battery_voltage': [],
+            'ambient_temperature': [],
+            'psp': [],
+            'machine_name': [],
+            'machine_alias': [],
+            'machine_location': []
+        }
+        if rows:
+            for data in rows:
+                fetch_data['machine_id'].append(data[0])
+                fetch_data['battery_voltage'].append(data[1])
+                fetch_data['ambient_temperature'].append(data[2])
+                fetch_data['psp'].append(data[3])
+                fetch_data['machine_name'].append(data[4])
+                fetch_data['machine_alias'].append(data[5])
+                fetch_data['machine_location'].append(data[6])
+        return fetch_data
+    else:
+        sql_query = '''SELECT m1.machine_id, m1.battery_voltage, m1.current ,m1.ambient_temperature, m1.psp, m1.tr_temp, m1.oil_level, m1.created_time, m2.machine_name, m2.machine_alias, m2.machine_location
+                            FROM machine_data AS m1
+                            JOIN machine_info AS m2 ON m1.machine_id = m2.id
+                            WHERE m2.role_id = %s
+                            ORDER BY m1.created_time DESC'''
+        cursor.execute(sql_query, (role_id,))
+        rows = cursor.fetchall()
+        print(rows)
+        fetch_data = {
+            'machine_id': [],
+            'battery_voltage': [],
+            'current': [],
+            'ambient_temperature': [],
+            'psp': [],
+            'tr_temp': [],
+            'oil_level': [],
+            'machine_name': [],
+            'machine_alias': [],
+            'machine_location': [],
+            'created_time': []
+        }
+        if rows:
+            for data in rows:
+                fetch_data['machine_id'].append(data[0])
+                fetch_data['battery_voltage'].append(data[1])
+                fetch_data['current'].append(data[2])
+                fetch_data['ambient_temperature'].append(data[3])
+                fetch_data['psp'].append(data[4])
+                fetch_data['tr_temp'].append(data[5])
+                fetch_data['oil_level'].append(data[6])
+                fetch_data['created_time'].append(data[7])
+                fetch_data['machine_name'].append(data[8])
+                fetch_data['machine_alias'].append(data[9])
+                fetch_data['machine_location'].append(data[10])
+        return fetch_data
 
 
 def get_test_machine_data_by_filter(conn, search_word):
@@ -244,7 +296,7 @@ def add_machine(conn, machine_id, location_name, alias_name, role_id):
 if __name__ == "__main__":
     print("For testing the db connection")
     conn = create_connection()
-    machine_data = get_test_machine_data_by_filter(conn, '%badda%')
+    machine_data = get_machine_data_by_machine_id_role_id(conn, 'mba', 2)
     print(machine_data)
     conn.close()
     print("Connection closed")

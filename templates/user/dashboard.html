@@ -16,14 +16,24 @@
         {% include 'user/searchbox.html' %}
     </div>
     <div class="row">
+        {% set m_len = m_data['machine_id']| length %}
+        {% set machine_ids = m_data | map(attribute='machine_id') | list %}
+        {% set unique_machine_ids = machine_ids | unique  | list %}
+        {% set machine_id_count = unique_machine_ids | length %}
+        {% set max_voltage = m_data['battery_voltage']|max %}
+        {% set max_ambient_temp = m_data['ambient_temperature']|max %}
+        {% set max_psp = m_data['psp']|max %}
+        {% set max_current = m_data['current']|max %}
+        {% set max_transformer_temp = m_data['tr_temp']|max %}
+        {% set max_oil_level = m_data['oil_level']|max %}
         {% set data_details = [
-            {"card_color": "primary", "title": "Machine Count", "val": "16", "unit": "quantity"},
-            {"card_color": "primary", "title": "Max voltage", "val": "15.01", "unit": "V"},
-            {"card_color": "success", "title": "Max Current", "val": "4.01", "unit": "A"},
-            {"card_color": "danger", "title": "Max Power", "val": "2.01 A", "unit": "KW"},
-            {"card_color": "danger", "title": "Max Transformer Temp", "val": "40.51 C", "unit": "C"},
-            {"card_color": "warning", "title": "Max Ambient Temp", "val": "25.01 C", "unit": "C"},
-            {"card_color": "primary", "title": "Max Oil Level", "val": "4.00", "unit": "(1-5)"}
+            {"card_color": "primary", "title": "Machine Count", "val": machine_id_count , "unit": "quantity"},
+            {"card_color": "primary", "title": "Max voltage", "val": max_voltage, "unit": "V"},
+            {"card_color": "success", "title": "Max Ambient Temp.", "val": max_ambient_temp, "unit": "C"},
+            {"card_color": "danger", "title": "Max PSP", "val": max_psp, "unit": "KW"},
+            {"card_color": "primary", "title": "Max Current", "val": max_current, "unit": "A"},
+            {"card_color": "danger", "title": "Max Transformer Temp.", "val": max_transformer_temp, "unit": "C"},
+            {"card_color": "primary", "title": "Max Oil Level", "val": max_oil_level, "unit": "L"},
         ] %}
         {% for idx in range(7) %}
         <div class="col-md-4 mb-4">
@@ -36,22 +46,7 @@
         {% endfor %}
     </div>
     <div>
-        {% set m_data_object = [
-            {"machine_id": "1", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "4.00"},
-            {"machine_id": "2", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "5.00"},
-            {"machine_id": "3", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
-             {"machine_id": "4", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "5", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "6", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-        {"machine_id": "7", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
-             {"machine_id": "8", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "9", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "10", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-        {"machine_id": "11", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "2.00"},
-             {"machine_id": "12", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "14", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-             {"machine_id": "16", "current": "12.01", "voltage": "15.01", "power": "4.01", "transformer_temp": "40.51", "ambient_temp": "25.01", "oil_level": "3.00"},
-        ] %}
+        {% set m_data_object = m_data %}
         {% include 'user/data_table_details.html' %}
     </div>
 </div>
