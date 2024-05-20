@@ -16,7 +16,7 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 
 @app.route('/')
 def user_dashboard():
-    if 'username' in session:
+    if 'username' in session and session['role_id'] !=1:
         role_id = session['role_id']
         conn = create_connection()
         machine_data = get_test_machine_data(conn, role_id, "user_dashboard")
@@ -54,7 +54,7 @@ def admin_dashboard():
         "user_data": None,
         'roles_data': None
     }
-    if 'username' in session:
+    if 'username' in session and session['role_id'] == 1:
         # Get all user  & role data from database and ppass through template
         conn = create_connection()
         user_data = get_users(conn)
@@ -62,7 +62,6 @@ def admin_dashboard():
         conn.close()
         data['user_data'] = user_data
         data['roles_data'] = role_data
-        print(data)
         return render_template("admin/dashboard.html", data=data, current_user=data['user_data']['username'][0])
     return redirect(url_for('login'))
 
@@ -72,13 +71,13 @@ def admin_dashboard():
 def update_user_role_password(id):
     if 'username' in session:
         if request.method == 'POST':
-            role_id = request.form['role_id']
+            new_role_id = request.form['role_id']
             password = request.form['password']
-            print("UpdateUser: ", id, password, role_id)
+            print("UpdateUser: ", id, password, new_role_id)
             conn = create_connection()
-            update_user(conn, id, password, role_id)
-            session['role_id'] = role_id
+            update_user(conn, id, password, new_role_id)
             conn.close()
+            flash('User updated successfully')
             return redirect(url_for('admin_dashboard'))
         return redirect(url_for('admin_dashboard'))
 
@@ -90,7 +89,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # print("LoginInfo: ", username, password)
         # Connect to database
         conn = create_connection()
         user = get_user_by_credentials(conn, username, password)
@@ -100,7 +98,7 @@ def login():
             session['username'] = user[0][1]  # Store username in session
             session['role_id'] = user[0][3]  # Store role_id in session
             if session['role_id'] == 1:
-                flash('You were successfully logged in')
+                flash('You were successfully logged in as Admin')
                 return redirect(url_for('admin_dashboard'))
             else:
                 print(f"Username: {session['username']} and Role_ID: {session['role_id']} ")
@@ -108,12 +106,28 @@ def login():
         else:
             flash('Invalid username or password! Please try again...')
             error = "Invalid username or password"  # More informative error message
+            return redirect(url_for('login'))
     else:
-        if 'username' in session:
-            return redirect(url_for('index'))
+        if 'username' in session and session['role_id'] == 1:
+            return redirect(url_for('admin_dashboard'))
+        elif 'username' in session and session['role_id'] != 1:
+            return redirect(url_for('user_dashboard'))
+        else:
+            return render_template('frontend/login.html', current_user=None)
 
-    return render_template('frontend/login.html', current_user=None)
 
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        # role_id = request.form['role_id']
+        conn = create_connection()
+        add_user(conn, username)
+        conn.close()
+        flash('User added successfully ! Wait for the admin approval and collects credentails from admin')
+        return redirect(url_for('login'))
+
+    return render_template('frontend/register.html')
 
 # Admin login method:
 # Machine ID search from machine_data table by using machine_id and role_id

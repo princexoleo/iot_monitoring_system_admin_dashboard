@@ -40,6 +40,13 @@ def create_user_table(con):
         print(e)  # _
 
 
+# Register user into databases
+def add_user(conn, username):
+    cursor = conn.cursor()
+    sql_query = "INSERT INTO users (username) VALUES (%s)"
+    cursor.execute(sql_query, (username,))
+    conn.commit()
+
 # Get data from users table
 def get_users(con):
     cursor = con.cursor()

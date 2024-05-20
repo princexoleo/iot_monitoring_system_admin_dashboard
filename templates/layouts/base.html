@@ -21,7 +21,11 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
       {% if session.get('username') and session.get('role_id') !=1%}
-          <a class="navbar-brand" href="{{ url_for('user_dashboard') }}">IoT Monitoring System</a>
+          {% if session['role_id'] !=1 %}
+              <a class="navbar-brand" href="{{ url_for('user_dashboard') }}">IoT Monitoring System</a>
+          {% else %}
+              <a class="navbar-brand" href="{{ url_for('admin_dashboard') }}">IoT Monitoring System</a>
+          {% endif %}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
